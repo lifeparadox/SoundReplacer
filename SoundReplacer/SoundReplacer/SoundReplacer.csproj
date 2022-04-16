@@ -128,7 +128,7 @@
     <Compile Include="Patches\LevelEndPatch.cs" />
     <Compile Include="Patches\MenuMusicPatch.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="PluginConfig.cs" />
+    <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="ReplacerFlowCoordinator.cs" />
     <Compile Include="ReplacerSettingsView.cs" />
     <Compile Include="SoundLoader.cs" />

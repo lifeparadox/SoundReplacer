@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using SoundReplacer.Configuration;
 using System.Collections.Generic;
 using UnityEngine;
 

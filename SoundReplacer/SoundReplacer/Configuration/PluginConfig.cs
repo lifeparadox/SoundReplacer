@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
-namespace SoundReplacer
+namespace SoundReplacer.Configuration
 {
     public class PluginConfig
     {

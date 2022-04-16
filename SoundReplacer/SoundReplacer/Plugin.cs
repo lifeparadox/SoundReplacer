@@ -2,6 +2,7 @@
 using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
+using SoundReplacer.Configuration;
 using System;
 using System.Reflection;
 using UnityEngine;

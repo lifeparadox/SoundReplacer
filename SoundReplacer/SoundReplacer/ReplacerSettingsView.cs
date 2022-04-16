@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using SoundReplacer.Configuration;
 using System.Collections.Generic;
 
 
