@@ -1,9 +1,6 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HarmonyLib;
 using UnityEngine;
 
 namespace SoundReplacer.Patches
@@ -24,29 +21,27 @@ namespace SoundReplacer.Patches
         private const int s_goodCutArrayLength = 10;
 
         [HarmonyPatch(typeof(NoteCutSoundEffect))]
-        [HarmonyPatch("Awake", MethodType.Normal)]
+
         public class BadCutSoundPatch
         {
-            public static void Prefix(ref AudioClip[] ____badCutSoundEffectAudioClips)
+            [HarmonyPatch(nameof(NoteCutSoundEffect.Awake))]
+            [HarmonyPrefix]
+            public static void AwakePrefix(ref AudioClip[] ____badCutSoundEffectAudioClips)
             {
-                if (_originalBadSounds == null)
-                {
+                if (_originalBadSounds == null) {
                     _originalBadSounds = new List<AudioClip>();
                     _originalBadSounds.AddRange(____badCutSoundEffectAudioClips);
                 }
 
-                if (Plugin.CurrentConfig.BadHitSound == "None")
-                {
+                if (Plugin.CurrentConfig.BadHitSound == "None") {
                     ____badCutSoundEffectAudioClips = new AudioClip[] { SoundLoader.GetEmptyClip() };
-                } else if (Plugin.CurrentConfig.BadHitSound == "Default")
-                {
+                }
+                else if (Plugin.CurrentConfig.BadHitSound == "Default") {
                     ____badCutSoundEffectAudioClips = _originalBadSounds.ToArray();
                 }
-                else if (_lastBadSelected != Plugin.CurrentConfig.BadHitSound)
-                {
+                else if (_lastBadSelected != Plugin.CurrentConfig.BadHitSound) {
                     _lastBadSelected = Plugin.CurrentConfig.BadHitSound;
-                    for (int i = 0; i < s_badCutArrayLength; i++)
-                    {
+                    for (var i = 0; i < s_badCutArrayLength; i++) {
                         if (_lastBadAudioClips[i] != null) {
                             GameObject.Destroy(_lastBadAudioClips[i]);
                             _lastBadAudioClips[i] = null;
@@ -55,11 +50,58 @@ namespace SoundReplacer.Patches
                     }
                     ____badCutSoundEffectAudioClips = _lastBadAudioClips;
                 }
-                else
-                {
+                else {
                     ____badCutSoundEffectAudioClips = _lastBadAudioClips;
                 }
             }
+            /// <summary>
+            /// バッドカット音が想定より長い場合再生されない不具合用のパッチ
+            /// </summary>
+            /// <param name="____endDSPtime"></param>
+            /// <param name="noteCutInfo"></param>
+            [HarmonyPatch(nameof(NoteCutSoundEffect.NoteWasCut), new Type[] { typeof(NoteController), typeof(NoteCutInfo) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Ref })]
+            [HarmonyPostfix]
+            public static void NotewasCutPostfix(ref double ____endDSPtime, NoteCutInfo noteCutInfo)
+            {
+                if (!noteCutInfo.allIsOK && -0.5 < AudioSettings.dspTime - ____endDSPtime) {
+                    ____endDSPtime = ____endDSPtime + 0.5;
+                }
+            }
+
+            /// <summary>
+            /// 勝手に音程変えないでくれ
+            /// </summary>
+            /// <param name="____pitch"></param>
+            /// <param name="____aheadTime"></param>
+            /// <param name="____audioSource"></param>
+            /// <param name="aheadTime"></param>
+            [HarmonyPatch(nameof(NoteCutSoundEffect.Init))]
+            [HarmonyPostfix]
+            public static void InitPostfix(ref float ____pitch, ref float ____aheadTime, ref AudioSource ____audioSource, float aheadTime)
+            {
+                ____pitch = 1;
+                ____aheadTime = aheadTime / ____pitch;
+                ____audioSource.pitch = ____pitch;
+            }
+#if false
+            [HarmonyPatch(nameof(NoteCutSoundEffect.NoteWasCut))]
+            [HarmonyTranspiler]
+            public static IEnumerable<CodeInstruction> NoteWasCutTranspiler(IEnumerable<CodeInstruction> instructions)
+            {
+                var maches = new CodeMatcher(instructions);
+                maches
+                    .Start()
+                    .MatchForward(false,
+                    new CodeMatch(OpCodes.Ldarg_0),
+                    new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(NoteCutSoundEffect), "_audioSource")),
+                    new CodeMatch(i => i.opcode == OpCodes.Ldc_I4_S && int.Parse($"{i.operand}") == 16),
+                    new CodeMatch(OpCodes.Callvirt, AccessTools.PropertySetter(typeof(AudioSource), nameof(AudioSource.priority))))
+                    .ThrowIfInvalid("0")
+                    .Advance(2)
+                    .Set(OpCodes.Ldc_I4_S, 0);
+                return maches.InstructionEnumeration();
+            }
+#endif
         }
 
         [HarmonyPatch(typeof(NoteCutSoundEffectManager))]
@@ -68,35 +110,28 @@ namespace SoundReplacer.Patches
         {
             public static void Prefix(ref AudioClip[] ____longCutEffectsAudioClips, ref AudioClip[] ____shortCutEffectsAudioClips)
             {
-                if (_originalGoodLongSounds == null)
-                {
+                if (_originalGoodLongSounds == null) {
                     _originalGoodLongSounds = new List<AudioClip>();
                     _originalGoodLongSounds.AddRange(____longCutEffectsAudioClips);
                 }
 
-                if (_originalGoodShortSounds == null)
-                {
+                if (_originalGoodShortSounds == null) {
                     _originalGoodShortSounds = new List<AudioClip>();
                     _originalGoodShortSounds.AddRange(____shortCutEffectsAudioClips);
                 }
 
-                if (Plugin.CurrentConfig.GoodHitSound == "None")
-                {
+                if (Plugin.CurrentConfig.GoodHitSound == "None") {
                     ____longCutEffectsAudioClips = new AudioClip[] { SoundLoader.GetEmptyClip() };
                     ____shortCutEffectsAudioClips = new AudioClip[] { SoundLoader.GetEmptyClip() };
                 }
-                else if (Plugin.CurrentConfig.GoodHitSound == "Default")
-                {
+                else if (Plugin.CurrentConfig.GoodHitSound == "Default") {
                     ____shortCutEffectsAudioClips = _originalGoodShortSounds.ToArray();
                     ____longCutEffectsAudioClips = _originalGoodLongSounds.ToArray();
                 }
-                else if (_lastGoodSelected != Plugin.CurrentConfig.GoodHitSound)
-                {
+                else if (_lastGoodSelected != Plugin.CurrentConfig.GoodHitSound) {
                     _lastGoodSelected = Plugin.CurrentConfig.GoodHitSound;
-                    for (int i = 0; i < s_goodCutArrayLength; i++)
-                    {
-                        if (_lastGoodAudioClips[i] != null)
-                        {
+                    for (var i = 0; i < s_goodCutArrayLength; i++) {
+                        if (_lastGoodAudioClips[i] != null) {
                             GameObject.Destroy(_lastGoodAudioClips[i]);
                             _lastGoodAudioClips[i] = null;
                         }
@@ -105,8 +140,7 @@ namespace SoundReplacer.Patches
                     ____shortCutEffectsAudioClips = _lastGoodAudioClips;
                     ____longCutEffectsAudioClips = _lastGoodAudioClips;
                 }
-                else
-                {
+                else {
                     ____shortCutEffectsAudioClips = _lastGoodAudioClips;
                     ____longCutEffectsAudioClips = _lastGoodAudioClips;
                 }
