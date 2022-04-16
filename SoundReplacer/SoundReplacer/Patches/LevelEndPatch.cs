@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HarmonyLib;
+﻿using HarmonyLib;
+using System;
 using UnityEngine;
 
 namespace SoundReplacer.Patches
@@ -29,23 +25,20 @@ namespace SoundReplacer.Patches
         {
             public static void Prefix(bool addedToHierarchy, ref SongPreviewPlayer ____songPreviewPlayer, ref LevelCompletionResults ____levelCompletionResults)
             {
-                if (!addedToHierarchy)
+                if (!addedToHierarchy) {
                     return;
-                
-                if (____levelCompletionResults.levelEndStateType == LevelCompletionResults.LevelEndStateType.Cleared)
-                {
-                    if (!(Plugin.CurrentConfig.SuccessSound == "Default" ||
-                          Plugin.CurrentConfig.SuccessSound == "None"))
-                    {
+                }
+
+                if (____levelCompletionResults.levelEndStateType == LevelCompletionResults.LevelEndStateType.Cleared) {
+                    if (!(PluginConfig.Instance.SuccessSound == "Default" ||
+                          PluginConfig.Instance.SuccessSound == "None")) {
                         AudioClip desiredSuccessClip;
 
-                        if (_lastSuccessSelected == Plugin.CurrentConfig.SuccessSound)
-                        {
+                        if (_lastSuccessSelected == PluginConfig.Instance.SuccessSound) {
                             desiredSuccessClip = _lastSuccessClip;
                         }
-                        else
-                        {
-                            _lastSuccessSelected = Plugin.CurrentConfig.SuccessSound;
+                        else {
+                            _lastSuccessSelected = PluginConfig.Instance.SuccessSound;
                             _lastSuccessClip = SoundLoader.LoadAudioClip(_lastSuccessSelected);
                             desiredSuccessClip = _lastSuccessClip;
                         }
@@ -54,20 +47,16 @@ namespace SoundReplacer.Patches
                     }
                 }
 
-                if (____levelCompletionResults.levelEndStateType == LevelCompletionResults.LevelEndStateType.Failed)
-                {
-                    if (!(Plugin.CurrentConfig.FailSound == "Default" ||
-                          Plugin.CurrentConfig.FailSound == "None"))
-                    {
+                if (____levelCompletionResults.levelEndStateType == LevelCompletionResults.LevelEndStateType.Failed) {
+                    if (!(PluginConfig.Instance.FailSound == "Default" ||
+                          PluginConfig.Instance.FailSound == "None")) {
                         AudioClip desiredFailClip;
 
-                        if (_lastFailSelected == Plugin.CurrentConfig.FailSound)
-                        {
+                        if (_lastFailSelected == PluginConfig.Instance.FailSound) {
                             desiredFailClip = _lastFailClip;
                         }
-                        else
-                        {
-                            _lastFailSelected = Plugin.CurrentConfig.FailSound;
+                        else {
+                            _lastFailSelected = PluginConfig.Instance.FailSound;
                             _lastFailClip = SoundLoader.LoadAudioClip(_lastFailSelected);
                             desiredFailClip = _lastFailClip;
                         }

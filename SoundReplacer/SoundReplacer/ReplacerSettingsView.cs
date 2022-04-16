@@ -1,17 +1,13 @@
-﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 
 namespace SoundReplacer
 {
     internal class ReplacerSettingsView : BSMLResourceViewController
     {
-        public override string ResourceName => string.Join(".", GetType().Namespace, GetType().Name);
+        public override string ResourceName => string.Join(".", this.GetType().Namespace, this.GetType().Name);
 
         [UIValue("good-hitsound-list")]
         public List<object> SettingsGoodHitSoundList = new List<object>(SoundLoader.GlobalSoundList);
@@ -19,8 +15,8 @@ namespace SoundReplacer
         [UIValue("good-hitsound")]
         protected string SettingCurrentGoodHitSound
         {
-            get => Plugin.CurrentConfig.GoodHitSound;
-            set => Plugin.CurrentConfig.GoodHitSound = value;
+            get => PluginConfig.Instance.GoodHitSound;
+            set => PluginConfig.Instance.GoodHitSound = value;
         }
 
         [UIValue("bad-hitsound-list")]
@@ -29,8 +25,8 @@ namespace SoundReplacer
         [UIValue("bad-hitsound")]
         protected string SettingCurrentBadHitSound
         {
-            get => Plugin.CurrentConfig.BadHitSound;
-            set => Plugin.CurrentConfig.BadHitSound = value;
+            get => PluginConfig.Instance.BadHitSound;
+            set => PluginConfig.Instance.BadHitSound = value;
         }
 
         [UIValue("menu-music-list")]
@@ -39,10 +35,10 @@ namespace SoundReplacer
         [UIValue("menu-music")]
         protected string SettingCurrentMenuMusic
         {
-            get => Plugin.CurrentConfig.MenuMusic;
+            get => PluginConfig.Instance.MenuMusic;
             set
             {
-                Plugin.CurrentConfig.MenuMusic = value;
+                PluginConfig.Instance.MenuMusic = value;
                 Helper.RefreshMenuMusic();
             }
         }
@@ -53,10 +49,10 @@ namespace SoundReplacer
         [UIValue("click-sound")]
         protected string SettingCurrentClickSound
         {
-            get => Plugin.CurrentConfig.ClickSound;
+            get => PluginConfig.Instance.ClickSound;
             set
             {
-                Plugin.CurrentConfig.ClickSound = value;
+                PluginConfig.Instance.ClickSound = value;
                 Helper.RefreshClickSounds();
             }
         }
@@ -67,8 +63,8 @@ namespace SoundReplacer
         [UIValue("success-sound")]
         protected string SettingCurrentSuccessSound
         {
-            get => Plugin.CurrentConfig.SuccessSound;
-            set => Plugin.CurrentConfig.SuccessSound = value;
+            get => PluginConfig.Instance.SuccessSound;
+            set => PluginConfig.Instance.SuccessSound = value;
         }
 
         [UIValue("fail-sound-list")]
@@ -77,8 +73,8 @@ namespace SoundReplacer
         [UIValue("fail-sound")]
         protected string SettingCurrentFailSound
         {
-            get => Plugin.CurrentConfig.FailSound;
-            set => Plugin.CurrentConfig.FailSound = value;
+            get => PluginConfig.Instance.FailSound;
+            set => PluginConfig.Instance.FailSound = value;
         }
     }
 }

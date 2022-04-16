@@ -1,9 +1,5 @@
-﻿using System;
+﻿using HarmonyLib;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HarmonyLib;
 using UnityEngine;
 
 namespace SoundReplacer.Patches
@@ -11,7 +7,7 @@ namespace SoundReplacer.Patches
     public class ClickSoundPatch
     {
         private static List<AudioClip> _originalClickClips;
-        
+
         private static AudioClip[] _lastClickClips;
         private static string _lastClickSelected;
 
@@ -21,29 +17,23 @@ namespace SoundReplacer.Patches
         {
             public static void Prefix(ref AudioClip[] ____clickSounds)
             {
-                if (_originalClickClips == null)
-                {
+                if (_originalClickClips == null) {
                     _originalClickClips = new List<AudioClip>();
                     _originalClickClips.AddRange(____clickSounds);
                 }
 
-                if (Plugin.CurrentConfig.ClickSound == "None")
-                {
+                if (PluginConfig.Instance.ClickSound == "None") {
                     ____clickSounds = new AudioClip[] { SoundLoader.GetEmptyClip() };
                 }
-                else if (Plugin.CurrentConfig.ClickSound == "Default")
-                {
+                else if (PluginConfig.Instance.ClickSound == "Default") {
                     ____clickSounds = _originalClickClips.ToArray();
                 }
-                else
-                {
-                    if (_lastClickSelected == Plugin.CurrentConfig.ClickSound)
-                    {
+                else {
+                    if (_lastClickSelected == PluginConfig.Instance.ClickSound) {
                         ____clickSounds = _lastClickClips;
                     }
-                    else
-                    {
-                        _lastClickSelected = Plugin.CurrentConfig.ClickSound;
+                    else {
+                        _lastClickSelected = PluginConfig.Instance.ClickSound;
                         _lastClickClips = new AudioClip[] { SoundLoader.LoadAudioClip(_lastClickSelected) };
                         ____clickSounds = _lastClickClips;
                     }

@@ -2,8 +2,8 @@
   "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
   "id": "SoundReplacer",
   "name": "SoundReplacer",
-  "author": "Otiosum",
-  "version": "0.0.6",
+  "author": "denpadokei",
+  "version": "0.0.7",
   "description": "Easily replace in-game sounds",
   "gameVersion": "1.19.0",
   "dependsOn": {

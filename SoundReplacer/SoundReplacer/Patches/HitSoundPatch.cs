@@ -33,14 +33,14 @@ namespace SoundReplacer.Patches
                     _originalBadSounds.AddRange(____badCutSoundEffectAudioClips);
                 }
 
-                if (Plugin.CurrentConfig.BadHitSound == "None") {
+                if (PluginConfig.Instance.BadHitSound == "None") {
                     ____badCutSoundEffectAudioClips = new AudioClip[] { SoundLoader.GetEmptyClip() };
                 }
-                else if (Plugin.CurrentConfig.BadHitSound == "Default") {
+                else if (PluginConfig.Instance.BadHitSound == "Default") {
                     ____badCutSoundEffectAudioClips = _originalBadSounds.ToArray();
                 }
-                else if (_lastBadSelected != Plugin.CurrentConfig.BadHitSound) {
-                    _lastBadSelected = Plugin.CurrentConfig.BadHitSound;
+                else if (_lastBadSelected != PluginConfig.Instance.BadHitSound) {
+                    _lastBadSelected = PluginConfig.Instance.BadHitSound;
                     for (var i = 0; i < s_badCutArrayLength; i++) {
                         if (_lastBadAudioClips[i] != null) {
                             GameObject.Destroy(_lastBadAudioClips[i]);
@@ -120,16 +120,16 @@ namespace SoundReplacer.Patches
                     _originalGoodShortSounds.AddRange(____shortCutEffectsAudioClips);
                 }
 
-                if (Plugin.CurrentConfig.GoodHitSound == "None") {
+                if (PluginConfig.Instance.GoodHitSound == "None") {
                     ____longCutEffectsAudioClips = new AudioClip[] { SoundLoader.GetEmptyClip() };
                     ____shortCutEffectsAudioClips = new AudioClip[] { SoundLoader.GetEmptyClip() };
                 }
-                else if (Plugin.CurrentConfig.GoodHitSound == "Default") {
+                else if (PluginConfig.Instance.GoodHitSound == "Default") {
                     ____shortCutEffectsAudioClips = _originalGoodShortSounds.ToArray();
                     ____longCutEffectsAudioClips = _originalGoodLongSounds.ToArray();
                 }
-                else if (_lastGoodSelected != Plugin.CurrentConfig.GoodHitSound) {
-                    _lastGoodSelected = Plugin.CurrentConfig.GoodHitSound;
+                else if (_lastGoodSelected != PluginConfig.Instance.GoodHitSound) {
+                    _lastGoodSelected = PluginConfig.Instance.GoodHitSound;
                     for (var i = 0; i < s_goodCutArrayLength; i++) {
                         if (_lastGoodAudioClips[i] != null) {
                             GameObject.Destroy(_lastGoodAudioClips[i]);

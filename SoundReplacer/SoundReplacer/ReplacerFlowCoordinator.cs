@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BeatSaberMarkupLanguage;
+﻿using BeatSaberMarkupLanguage;
 using HMUI;
 
 namespace SoundReplacer
@@ -14,18 +9,20 @@ namespace SoundReplacer
 
         public void Awake()
         {
-            if (_settingsView == null)
-                _settingsView = BeatSaberUI.CreateViewController<ReplacerSettingsView>();
+            if (this._settingsView == null) {
+                this._settingsView = BeatSaberUI.CreateViewController<ReplacerSettingsView>();
+            }
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            if (!firstActivation) 
+            if (!firstActivation) {
                 return;
+            }
 
-            SetTitle("SoundReplacer");
-            showBackButton = true;
-            ProvideInitialViewControllers(_settingsView);
+            this.SetTitle("SoundReplacer");
+            this.showBackButton = true;
+            this.ProvideInitialViewControllers(this._settingsView);
         }
 
         protected override void BackButtonWasPressed(ViewController topViewController)
