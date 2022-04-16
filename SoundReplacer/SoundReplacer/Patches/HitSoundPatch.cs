@@ -20,7 +20,7 @@ namespace SoundReplacer.Patches
         private static readonly AudioClip[] _lastGoodAudioClips = new AudioClip[s_goodCutArrayLength];
         private static string _lastGoodSelected;
 
-        private const int s_badCutArrayLength = 10;
+        private const int s_badCutArrayLength = 4;
         private const int s_goodCutArrayLength = 10;
 
         [HarmonyPatch(typeof(NoteCutSoundEffect))]
