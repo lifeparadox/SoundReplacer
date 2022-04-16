@@ -14,11 +14,14 @@ namespace SoundReplacer.Patches
         private static List<AudioClip> _originalGoodLongSounds;
         private static List<AudioClip> _originalGoodShortSounds;
 
-        private static AudioClip[] _lastBadAudioClips;
+        private static readonly AudioClip[] _lastBadAudioClips = new AudioClip[s_badCutArrayLength];
         private static string _lastBadSelected;
 
-        private static AudioClip[] _lastGoodAudioClips;
+        private static readonly AudioClip[] _lastGoodAudioClips = new AudioClip[s_goodCutArrayLength];
         private static string _lastGoodSelected;
+
+        private const int s_badCutArrayLength = 10;
+        private const int s_goodCutArrayLength = 10;
 
         [HarmonyPatch(typeof(NoteCutSoundEffect))]
         [HarmonyPatch("Awake", MethodType.Normal)]
@@ -39,18 +42,22 @@ namespace SoundReplacer.Patches
                 {
                     ____badCutSoundEffectAudioClips = _originalBadSounds.ToArray();
                 }
+                else if (_lastBadSelected != Plugin.CurrentConfig.BadHitSound)
+                {
+                    _lastBadSelected = Plugin.CurrentConfig.BadHitSound;
+                    for (int i = 0; i < s_badCutArrayLength; i++)
+                    {
+                        if (_lastBadAudioClips[i] != null) {
+                            GameObject.Destroy(_lastBadAudioClips[i]);
+                            _lastBadAudioClips[i] = null;
+                        }
+                        _lastBadAudioClips[i] = SoundLoader.LoadAudioClip(_lastBadSelected);
+                    }
+                    ____badCutSoundEffectAudioClips = _lastBadAudioClips;
+                }
                 else
                 {
-                    if (_lastBadSelected == Plugin.CurrentConfig.BadHitSound)
-                    {
-                        ____badCutSoundEffectAudioClips = _lastBadAudioClips;
-                    }
-                    else
-                    {
-                        _lastBadSelected = Plugin.CurrentConfig.BadHitSound;
-                        _lastBadAudioClips = new AudioClip[] { SoundLoader.LoadAudioClip(_lastBadSelected) };
-                        ____badCutSoundEffectAudioClips = _lastBadAudioClips;
-                    }
+                    ____badCutSoundEffectAudioClips = _lastBadAudioClips;
                 }
             }
         }
@@ -83,20 +90,25 @@ namespace SoundReplacer.Patches
                     ____shortCutEffectsAudioClips = _originalGoodShortSounds.ToArray();
                     ____longCutEffectsAudioClips = _originalGoodLongSounds.ToArray();
                 }
+                else if (_lastGoodSelected != Plugin.CurrentConfig.GoodHitSound)
+                {
+                    _lastGoodSelected = Plugin.CurrentConfig.GoodHitSound;
+                    for (int i = 0; i < s_goodCutArrayLength; i++)
+                    {
+                        if (_lastGoodAudioClips[i] != null)
+                        {
+                            GameObject.Destroy(_lastGoodAudioClips[i]);
+                            _lastGoodAudioClips[i] = null;
+                        }
+                        _lastGoodAudioClips[i] = SoundLoader.LoadAudioClip(_lastGoodSelected); ;
+                    }
+                    ____shortCutEffectsAudioClips = _lastGoodAudioClips;
+                    ____longCutEffectsAudioClips = _lastGoodAudioClips;
+                }
                 else
                 {
-                    if (_lastGoodSelected == Plugin.CurrentConfig.GoodHitSound)
-                    {
-                        ____shortCutEffectsAudioClips = _lastGoodAudioClips;
-                        ____longCutEffectsAudioClips = _lastGoodAudioClips;
-                    }
-                    else
-                    {
-                        _lastGoodSelected = Plugin.CurrentConfig.GoodHitSound;
-                        _lastGoodAudioClips = new AudioClip[] { SoundLoader.LoadAudioClip(_lastGoodSelected) };
-                        ____shortCutEffectsAudioClips = _lastGoodAudioClips;
-                        ____longCutEffectsAudioClips = _lastGoodAudioClips;
-                    }
+                    ____shortCutEffectsAudioClips = _lastGoodAudioClips;
+                    ____longCutEffectsAudioClips = _lastGoodAudioClips;
                 }
             }
         }
