@@ -7,10 +7,10 @@ namespace SoundReplacer.Patches
 {
     public class ClickSoundPatch
     {
-        private static List<AudioClip> _originalClickClips;
+        private static List<AudioClip>? _originalClickClips;
 
-        private static AudioClip[] _lastClickClips;
-        private static string _lastClickSelected;
+        private static AudioClip[]? _lastClickClips;
+        private static string? _lastClickSelected;
 
         [HarmonyPatch(typeof(BasicUIAudioManager))]
         [HarmonyPatch("Start", MethodType.Normal)]
@@ -31,7 +31,7 @@ namespace SoundReplacer.Patches
                 }
                 else {
                     if (_lastClickSelected == PluginConfig.Instance.ClickSound) {
-                        ____clickSounds = _lastClickClips;
+                        ____clickSounds = _lastClickClips!;
                     }
                     else {
                         _lastClickSelected = PluginConfig.Instance.ClickSound;

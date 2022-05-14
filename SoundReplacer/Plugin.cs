@@ -13,9 +13,11 @@ namespace SoundReplacer
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
-        internal static Plugin Instance { get; private set; }
-        internal static IPALogger Log { get; private set; }
-        private Harmony _harmony;
+        private Harmony? _harmony;
+        internal static Plugin Instance { get; private set; } = null!;
+        internal static IPALogger Log { get; private set; } = null!;
+        internal static PluginConfig CurrentConfig { get; private set; } = null!;
+
         [Init]
         public void Init(Config config, IPALogger logger)
         {
@@ -52,7 +54,7 @@ namespace SoundReplacer
         public void OnDisable()
         {
             try {
-                this._harmony.UnpatchSelf();
+                this._harmony?.UnpatchSelf();
             }
             catch (Exception e) {
                 Log.Error(e);

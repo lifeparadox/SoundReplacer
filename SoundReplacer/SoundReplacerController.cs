@@ -6,9 +6,9 @@ namespace SoundReplacer
 {
     public class SoundReplacerController : MonoBehaviour
     {
-        public static SoundReplacerController Instance { get; private set; }
+        public static SoundReplacerController? Instance { get; private set; }
 
-        private ReplacerFlowCoordinator _flowCoordinator;
+        private ReplacerFlowCoordinator? _flowCoordinator;
 
         private void Awake()
         {

@@ -7,11 +7,11 @@ namespace SoundReplacer.Patches
 {
     public class LevelEndPatch
     {
-        private static AudioClip _lastSuccessClip;
-        private static string _lastSuccessSelected;
+        private static AudioClip? _lastSuccessClip;
+        private static string? _lastSuccessSelected;
 
-        private static AudioClip _lastFailClip;
-        private static string _lastFailSelected;
+        private static AudioClip? _lastFailClip;
+        private static string? _lastFailSelected;
 
         public static void DummyCallback()
         {
@@ -35,7 +35,7 @@ namespace SoundReplacer.Patches
                           PluginConfig.Instance.SuccessSound == "None")) {
                         AudioClip desiredSuccessClip;
 
-                        if (_lastSuccessSelected == PluginConfig.Instance.SuccessSound) {
+                        if (_lastSuccessSelected == PluginConfig.Instance.SuccessSound && _lastSuccessClip != null) {
                             desiredSuccessClip = _lastSuccessClip;
                         }
                         else {
@@ -53,7 +53,7 @@ namespace SoundReplacer.Patches
                           PluginConfig.Instance.FailSound == "None")) {
                         AudioClip desiredFailClip;
 
-                        if (_lastFailSelected == PluginConfig.Instance.FailSound) {
+                        if (_lastFailSelected == PluginConfig.Instance.FailSound && _lastFailClip != null) {
                             desiredFailClip = _lastFailClip;
                         }
                         else {
@@ -69,4 +69,3 @@ namespace SoundReplacer.Patches
         }
     }
 }
-

@@ -8,15 +8,15 @@ namespace SoundReplacer.Patches
 {
     public class HitSoundPatch
     {
-        private static List<AudioClip> _originalBadSounds;
-        private static List<AudioClip> _originalGoodLongSounds;
-        private static List<AudioClip> _originalGoodShortSounds;
+        private static List<AudioClip>? _originalBadSounds;
+        private static List<AudioClip>? _originalGoodLongSounds;
+        private static List<AudioClip>? _originalGoodShortSounds;
 
         private static readonly AudioClip[] _lastBadAudioClips = new AudioClip[s_badCutArrayLength];
-        private static string _lastBadSelected;
+        private static string? _lastBadSelected;
 
         private static readonly AudioClip[] _lastGoodAudioClips = new AudioClip[s_goodCutArrayLength];
-        private static string _lastGoodSelected;
+        private static string? _lastGoodSelected;
 
         private const int s_badCutArrayLength = 4;
         private const int s_goodCutArrayLength = 10;
@@ -45,7 +45,6 @@ namespace SoundReplacer.Patches
                     for (var i = 0; i < s_badCutArrayLength; i++) {
                         if (_lastBadAudioClips[i] != null) {
                             GameObject.Destroy(_lastBadAudioClips[i]);
-                            _lastBadAudioClips[i] = null;
                         }
                         _lastBadAudioClips[i] = SoundLoader.LoadAudioClip(_lastBadSelected);
                     }
@@ -134,7 +133,6 @@ namespace SoundReplacer.Patches
                     for (var i = 0; i < s_goodCutArrayLength; i++) {
                         if (_lastGoodAudioClips[i] != null) {
                             GameObject.Destroy(_lastGoodAudioClips[i]);
-                            _lastGoodAudioClips[i] = null;
                         }
                         _lastGoodAudioClips[i] = SoundLoader.LoadAudioClip(_lastGoodSelected); ;
                     }

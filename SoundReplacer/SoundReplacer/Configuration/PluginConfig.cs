@@ -6,7 +6,7 @@ namespace SoundReplacer.Configuration
 {
     public class PluginConfig
     {
-        public static PluginConfig Instance { get; internal set; }
+        public static PluginConfig Instance { get; internal set; } = null!;
 
         public virtual string GoodHitSound { get; set; } = "Default";
         public virtual string BadHitSound { get; set; } = "Default";
