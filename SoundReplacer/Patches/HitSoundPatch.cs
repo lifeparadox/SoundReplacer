@@ -55,7 +55,7 @@ namespace SoundReplacer.Patches
                 }
             }
             /// <summary>
-            /// バッドカット音が想定より長い場合再生されない不具合用のパッチ
+            /// Patch for bug that bad cut sound does not play if longer than expected
             /// </summary>
             /// <param name="____endDSPtime"></param>
             /// <param name="noteCutInfo"></param>
@@ -69,7 +69,7 @@ namespace SoundReplacer.Patches
             }
 
             /// <summary>
-            /// 勝手に音程変えないでくれ
+            /// Don't change the pitch on your own.
             /// </summary>
             /// <param name="____pitch"></param>
             /// <param name="____aheadTime"></param>
