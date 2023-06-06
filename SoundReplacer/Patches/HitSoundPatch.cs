@@ -61,7 +61,7 @@ namespace SoundReplacer.Patches
             /// <param name="noteCutInfo"></param>
             [HarmonyPatch(nameof(NoteCutSoundEffect.NoteWasCut), new Type[] { typeof(NoteController), typeof(NoteCutInfo) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Ref })]
             [HarmonyPostfix]
-            public static void NotewasCutPostfix(ref double ____endDSPtime, NoteCutInfo noteCutInfo)
+            public static void NoteWasCutPostfix(ref double ____endDSPtime, NoteCutInfo noteCutInfo)
             {
                 if (!noteCutInfo.allIsOK && -0.5 < AudioSettings.dspTime - ____endDSPtime) {
                     ____endDSPtime = ____endDSPtime + 0.5;
