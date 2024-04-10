@@ -43,7 +43,7 @@ namespace SoundReplacer
 
         private static UnityWebRequest GetRequest(string fullPath)
         {
-            var fileUrl = "file:///" + fullPath;
+            var fileUrl ="file:///" + UnityWebRequest.EscapeURL(fullPath);
             var fileInfo = new FileInfo(fullPath);
             var extension = fileInfo.Extension;
             switch (extension) {
